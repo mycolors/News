@@ -1,11 +1,9 @@
-package com.fengniao.news.ui;
+package com.fengniao.news.ui.activity;
 
-import android.content.pm.ProviderInfo;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.fengniao.news.R;
@@ -29,6 +27,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static com.fengniao.news.app.Constant.UNKNOWN_ERROR;
+
 public class MainActivity extends BaseActivity {
     @BindView(R.id.news_list)
     RecyclerView newsList;
@@ -51,7 +51,9 @@ public class MainActivity extends BaseActivity {
         mAdapter.setmOnItemClickListener(new NewsListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                intent.putExtra("id", mList.get(position).id);
+                startActivity(intent);
             }
         });
     }
@@ -73,7 +75,7 @@ public class MainActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, "未知错误", Toast.LENGTH_SHORT).show();
+                        showToast(UNKNOWN_ERROR);
                     }
                 });
             }
@@ -84,8 +86,8 @@ public class MainActivity extends BaseActivity {
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     String date = jsonObject.getString("date");
                     JSONArray result = jsonObject.getJSONArray("stories");
-                    mList = JsonUtils.jsonToList(result.toString(), News.class);
-                    Log.i("tag", result.toString());
+                    List<News> list = JsonUtils.jsonToList(result.toString(), News.class);
+                    mList.addAll(list);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

@@ -6,18 +6,21 @@
 
     <ImageView
         android:id="@+id/img_news"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/view_padding"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/view_margin_small" />
 
     <TextView
         android:id="@+id/text_news"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/view_margin"
+        android:layout_centerVertical="true"
         android:layout_toRightOf="@id/img_news"
-        android:text="标题" />
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:padding="@dimen/view_padding_small"
+        android:textSize="@dimen/font_title_size" />
 
     <View style="@style/line" />
 

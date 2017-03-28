@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="view_padding">16sp</dimen>
+    <dimen name="view_padding_small">8dp</dimen>
     <dimen name="view_margin">16sp</dimen>
+    <dimen name="view_margin_small">8dp</dimen>
+    <dimen name="font_title_size">18sp</dimen>
 
 </resources>

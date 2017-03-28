@@ -4,12 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fengniao.news.ui.activity.MainActivity">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/news_list"
+    tools:context="com.fengniao.news.ui.activity.InnerBrowserActivity">
+    <WebView
+        android:id="@+id/web_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
