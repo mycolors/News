@@ -22,7 +22,6 @@ public class FNCallbackHolder implements Callback {
 
     @Override
     public void onFailure(Call call, IOException e) {
-
     }
 
     @Override

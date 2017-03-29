@@ -14,14 +14,13 @@ public class NewsDetail {
     public List<String> cssList;
     public List<Recommenders> recommenders;
 
-
-    public class Section {
+    private class Section {
         public String thumbnail;
         public int id;
         public String name;
     }
 
-    public class Recommenders {
+    private class Recommenders {
         public String avatar;
     }
 }

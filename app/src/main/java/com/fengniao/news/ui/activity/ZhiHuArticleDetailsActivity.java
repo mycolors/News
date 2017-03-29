@@ -1,15 +1,10 @@
 package com.fengniao.news.ui.activity;
 
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -18,9 +13,6 @@ import com.fengniao.news.R;
 import com.fengniao.news.bean.NewsDetail;
 import com.fengniao.news.ui.base.BaseActivity;
 import com.fengniao.news.util.JsonUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -31,13 +23,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static android.view.KeyEvent.KEYCODE_BACK;
 import static com.fengniao.news.app.Constant.UNKNOWN_ERROR;
-import static com.fengniao.news.app.Constant.URL_NEWS_DETAIL;
+import static com.fengniao.news.net.Api.URL_NEWS_DETAIL;
 
-public class DetailsActivity extends BaseActivity {
+public class ZhiHuArticleDetailsActivity extends BaseActivity {
     @BindView(R.id.web_view)
     WebView webView;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefresh;
     private int ariticleId;
     private NewsDetail detail;
 
@@ -50,6 +43,13 @@ public class DetailsActivity extends BaseActivity {
     }
 
     private void initView() {
+        swipeRefresh.setRefreshing(true);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getDetail();
+            }
+        });
         ariticleId = getIntent().getIntExtra("id", -1);
         if (ariticleId < 0) return;
         getDetail();
@@ -84,6 +84,8 @@ public class DetailsActivity extends BaseActivity {
                         String encoding = "UTF-8";
                         String mimeType = "text/html";
                         webView.loadDataWithBaseURL("x-data://base", html, mimeType, encoding, null);
+                        if (swipeRefresh.isRefreshing())
+                            swipeRefresh.setRefreshing(false);
                     }
                 });
 
@@ -142,24 +144,10 @@ public class DetailsActivity extends BaseActivity {
 
         webView.getSettings().setAppCacheEnabled(true);
 
-        webView.setWebViewClient(new WebViewClient());
-
-        webView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
-                        webView.goBack();
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Intent intent = new Intent(DetailsActivity.this, InnerBrowserActivity.class);
+                Intent intent = new Intent(ZhiHuArticleDetailsActivity.this, InnerBrowserActivity.class);
                 intent.putExtra("url", url);
                 startActivity(intent);
                 return true;
