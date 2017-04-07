@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class NewsDetail {
+public class ZhiHuArticleDetail {
     public String body;
     public String title;
     public String image;

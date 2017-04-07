@@ -4,4 +4,7 @@
     <string name="title">标题</string>
     <string name="loading">正在加载</string>
     <string name="not_have_more">没有更多了</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

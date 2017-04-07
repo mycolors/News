@@ -41,7 +41,7 @@ public class ZhiHuArticleListAdapter extends RecyclerView.Adapter<ZhiHuArticleLi
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_list_footer, parent, false);
             return new MyViewHolder(view);
         } else {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.item_list_news, parent, false);
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_list_zhihu, parent, false);
             return new MyViewHolder(view);
         }
     }
@@ -55,7 +55,7 @@ public class ZhiHuArticleListAdapter extends RecyclerView.Adapter<ZhiHuArticleLi
             } else {
                 holder.getView(R.id.progress_bar).setVisibility(View.VISIBLE);
                 ((TextView) holder.getView(R.id.tv_end)).setText(R.string.loading);
-                ((MainActivity) mContext).loadMore();
+//                ((MainActivity) mContext).loadMore();
             }
         } else {
             holder.title.setText(mList.get(position).title);

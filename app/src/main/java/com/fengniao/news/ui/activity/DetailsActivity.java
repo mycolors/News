@@ -2,21 +2,26 @@ package com.fengniao.news.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.fengniao.news.R;
-import com.fengniao.news.bean.NewsDetail;
+import com.fengniao.news.bean.ZhiHuArticleDetail;
 import com.fengniao.news.ui.base.BaseActivity;
 import com.fengniao.news.util.JsonUtils;
 
 import java.io.IOException;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -26,13 +31,21 @@ import okhttp3.Response;
 import static com.fengniao.news.app.Constant.UNKNOWN_ERROR;
 import static com.fengniao.news.net.Api.URL_NEWS_DETAIL;
 
-public class ZhiHuArticleDetailsActivity extends BaseActivity {
+public class DetailsActivity extends BaseActivity {
     @BindView(R.id.web_view)
     WebView webView;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.scroll_view)
+    NestedScrollView scrollView;
+    @BindView(R.id.toolbar_layout)
+    CollapsingToolbarLayout toolbarLayout;
+    @BindView(R.id.img)
+    ImageView img;
+    //    @BindView(R.id.toolbar)
+//    Toolbar toolbar;
     private int ariticleId;
-    private NewsDetail detail;
+    private ZhiHuArticleDetail detail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +68,11 @@ public class ZhiHuArticleDetailsActivity extends BaseActivity {
         getDetail();
     }
 
+    @OnClick(R.id.toolbar)
+    public void toolBar(View view) {
+        scrollView.smoothScrollTo(0, 0);
+    }
+
 
     private void getDetail() {
         OkHttpClient client = new OkHttpClient();
@@ -75,7 +93,7 @@ public class ZhiHuArticleDetailsActivity extends BaseActivity {
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-                detail = JsonUtils.jsonToBean(response.body().string(), NewsDetail.class);
+                detail = JsonUtils.jsonToBean(response.body().string(), ZhiHuArticleDetail.class);
                 final String html = getHtml(detail.body);
                 runOnUiThread(new Runnable() {
                     @Override
@@ -84,6 +102,8 @@ public class ZhiHuArticleDetailsActivity extends BaseActivity {
                         String encoding = "UTF-8";
                         String mimeType = "text/html";
                         webView.loadDataWithBaseURL("x-data://base", html, mimeType, encoding, null);
+                        Glide.with(DetailsActivity.this).load(detail.image).into(img);
+                        setCollapsingToolbarLayoutTitle(detail.title);
                         if (swipeRefresh.isRefreshing())
                             swipeRefresh.setRefreshing(false);
                     }
@@ -91,6 +111,15 @@ public class ZhiHuArticleDetailsActivity extends BaseActivity {
 
             }
         });
+    }
+
+    // to change the title's font size of toolbar layout
+    private void setCollapsingToolbarLayoutTitle(String title) {
+        toolbarLayout.setTitle(title);
+        toolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
+        toolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
+        toolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBarPlus1);
+        toolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarPlus1);
     }
 
 
@@ -147,7 +176,7 @@ public class ZhiHuArticleDetailsActivity extends BaseActivity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Intent intent = new Intent(ZhiHuArticleDetailsActivity.this, InnerBrowserActivity.class);
+                Intent intent = new Intent(DetailsActivity.this, InnerBrowserActivity.class);
                 intent.putExtra("url", url);
                 startActivity(intent);
                 return true;
@@ -161,4 +190,11 @@ public class ZhiHuArticleDetailsActivity extends BaseActivity {
         webView.destroy();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.i("tag", "exit");
+        System.exit(0);
+    }
 }

@@ -2,6 +2,7 @@ package com.fengniao.news.ui.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -73,5 +74,11 @@ public class InnerBrowserActivity extends BaseActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        System.exit(0);
     }
 }
