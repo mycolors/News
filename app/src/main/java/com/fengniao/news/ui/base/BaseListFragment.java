@@ -23,14 +23,15 @@ public abstract class BaseListFragment<T> extends BaseFragment implements FNAdap
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
+    //是否开启懒加载
     protected List<T> mList;
     FNAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    int mPage, mCount = 10;
 
     public BaseListFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -38,21 +39,71 @@ public abstract class BaseListFragment<T> extends BaseFragment implements FNAdap
         initView();
     }
 
-    public void setRefresh(boolean status) {
+    //刷新控件开关
+    public void enableRefresh(boolean status) {
         //禁止下拉刷新
         swipeRefreshLayout.setEnabled(status);
     }
 
+    //是否显示refreshBar
+    public void showRefreshBar(boolean isShow) {
+        swipeRefreshLayout.setRefreshing(isShow);
+    }
+
+    public void setListAdapter() {
+        if (getActivity() == null) return;
+
+        if (mAdapter == null) {
+            initAdapter();
+            mRecyclerView.setAdapter(mAdapter);
+        } else
+            notifyDataSetChanged();
+
+        if (swipeRefreshLayout.isRefreshing())
+            showRefreshBar(false);
+
+        mAdapter.setLoadMoreStatus(false);
+    }
+
+
+    public abstract void loadData();
+
+    @Override
+    public void loadMore() {
+        mPage++;
+        loadData();
+    }
 
     private void initView() {
-        mAdapter = new FNAdapter();
-        mAdapter.setViewProvider(this);
         mList = new ArrayList<>();
+        showRefreshBar(true);
+        initAdapter();
         mLayoutManager = onCreateLayoutManager();
         if (mLayoutManager == null)
             mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                BaseListFragment.this.onRefresh();
+            }
+        });
+    }
+
+    public void onRefresh() {
+        mPage = 0;
+        mList.clear();
+        loadData();
+    }
+
+    public void initAdapter() {
+        mAdapter = new FNAdapter(getContext(), mList);
+        mAdapter.setViewProvider(this);
+    }
+
+    public void enableLoadMore(boolean isLoadMore) {
+        mAdapter.enableLoadMore(isLoadMore);
     }
 
     public RecyclerView.LayoutManager onCreateLayoutManager() {

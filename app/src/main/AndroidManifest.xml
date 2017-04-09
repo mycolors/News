@@ -22,11 +22,12 @@
         </activity>
         <activity
             android:name=".ui.activity.DetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:process=":details"/>
+            android:process=":details"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.base.BaseActivity" />
-        <activity android:name=".ui.activity.InnerBrowserActivity"
-            android:process=":innerBrower"/>
+        <activity
+            android:name=".ui.activity.InnerBrowserActivity"
+            android:process=":innerBrower" />
         <activity android:name=".ui.activity.ListTestActivity">
 
         </activity>

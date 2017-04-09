@@ -6,9 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.fengniao.news.ui.activity.ListTestActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/test_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <include layout="@layout/base_recycler_view" />
 
 </LinearLayout>

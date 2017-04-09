@@ -1,12 +1,16 @@
 package com.fengniao.news.ui.activity;
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fengniao.news.R;
+import com.fengniao.news.ui.base.BaseListActivity;
 import com.fengniao.news.ui.base.FNAdapter;
 import com.fengniao.news.ui.base.BaseActivity;
 
@@ -15,33 +19,45 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class ListTestActivity extends BaseActivity implements FNAdapter.ViewProvider {
-    @BindView(R.id.test_list)
-    RecyclerView testList;
-    private List<String> mList = new ArrayList();
-    private FNAdapter adapter = new FNAdapter();
+public class ListTestActivity extends BaseListActivity {
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_test);
-        loadData();
-        testList.setLayoutManager(new LinearLayoutManager(this));
-        testList.setAdapter(adapter);
-        adapter.setViewProvider(this);
+    public void setContentView(@LayoutRes int layoutResID) {
+        super.setContentView(R.layout.activity_list_test);
     }
 
+
+    @Override
     public void loadData() {
+        enableRefresh(false);
+        enableLoadMore(false);
         mList.add("");
         mList.add("");
         mList.add("");
+        mList.add("");
+        mList.add("");
+        mList.add("");
+        mList.add("");
+        mList.add("");
+        mList.add("");
+        mList.add("");
+        mList.add("");
+        mList.add("");
+        mList.add("");
+        mList.add("");
+        mList.add("");
+        mList.add("");
+
+        mList.add("");
+        setListAdapter();
     }
 
+
     @Override
-    public FNAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        TextView textView = new TextView(ListTestActivity.this);
-        textView.setText("test");
-        return new FNAdapter.MyViewHolder(textView);
+    public View getView(ViewGroup parent, int viewType) {
+     View view = LayoutInflater.from(this).inflate(R.layout.item_list_zhihu,parent,false);
+        return view;
     }
 
     @Override
@@ -63,4 +79,5 @@ public class ListTestActivity extends BaseActivity implements FNAdapter.ViewProv
     public void onItemClick(FNAdapter.MyViewHolder holder, int position) {
 
     }
+
 }

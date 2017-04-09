@@ -60,20 +60,14 @@ public class TouTiaoNewsFragment extends BaseListFragment<TouTiaoNews> {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initView();
+        initList();
         isViewCreated = true;
     }
 
-    public void initView() {
+    public void initList() {
         setLayoutManager(new GridLayoutManager(getContext(), 3));
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mList.clear();
-                loadData();
-            }
-        });
-        setRefresh(false);
+        enableRefresh(false);
+        enableLoadMore(true);
     }
 
     @Override
@@ -89,8 +83,8 @@ public class TouTiaoNewsFragment extends BaseListFragment<TouTiaoNews> {
         }
     }
 
+    @Override
     public void loadData() {
-        swipeRefresh.setRefreshing(true);
         getNews();
     }
 
@@ -125,20 +119,17 @@ public class TouTiaoNewsFragment extends BaseListFragment<TouTiaoNews> {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        notifyDataSetChanged();
-                        if (swipeRefresh.isRefreshing())
-                            swipeRefresh.setRefreshing(false);
+                        setListAdapter();
                     }
                 });
             }
         });
-
     }
 
     @Override
-    public FNAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public View getView(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.item_list_news, parent, false);
-        return new FNAdapter.MyViewHolder(view);
+        return view;
     }
 
     @Override
@@ -161,6 +152,5 @@ public class TouTiaoNewsFragment extends BaseListFragment<TouTiaoNews> {
         intent.putExtra("url", mList.get(position).url);
         startActivity(intent);
     }
-
 
 }
