@@ -55,7 +55,6 @@ public class ZhiHuArticleListAdapter extends RecyclerView.Adapter<ZhiHuArticleLi
             } else {
                 holder.getView(R.id.progress_bar).setVisibility(View.VISIBLE);
                 ((TextView) holder.getView(R.id.tv_end)).setText(R.string.loading);
-//                ((MainActivity) mContext).loadMore();
             }
         } else {
             holder.title.setText(mList.get(position).title);

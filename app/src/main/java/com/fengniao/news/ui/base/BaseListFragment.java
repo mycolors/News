@@ -23,19 +23,39 @@ public abstract class BaseListFragment<T> extends BaseFragment implements FNAdap
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
-    //是否开启懒加载
     protected List<T> mList;
     FNAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     int mPage, mCount = 10;
+    private boolean isViewCreated = false;
+    private boolean isFirst = true;
 
     public BaseListFragment() {
         // Required empty public constructor
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (!enableLazyLoad()) return;
+        if (isViewCreated) lazyLoad();
+    }
+
+    public void lazyLoad() {
+        //只有第一次进入才进行懒加载
+        if (isFirst) {
+            loadData(true);
+            isFirst = false;
+        }
+    }
+
+    //是否开启懒加载
+    public abstract boolean enableLazyLoad();
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        isViewCreated = true;
         initView();
     }
 
@@ -65,13 +85,12 @@ public abstract class BaseListFragment<T> extends BaseFragment implements FNAdap
         mAdapter.setLoadMoreStatus(false);
     }
 
-
-    public abstract void loadData();
+    public abstract void loadData(boolean isClear);
 
     @Override
     public void loadMore() {
         mPage++;
-        loadData();
+        loadData(false);
     }
 
     private void initView() {
@@ -89,16 +108,16 @@ public abstract class BaseListFragment<T> extends BaseFragment implements FNAdap
                 BaseListFragment.this.onRefresh();
             }
         });
+        if (!enableLazyLoad()) loadData(false);
     }
 
     public void onRefresh() {
         mPage = 0;
-        mList.clear();
-        loadData();
+        loadData(true);
     }
 
     public void initAdapter() {
-        mAdapter = new FNAdapter(getContext(), mList);
+        mAdapter = new FNAdapter<T>(getContext(), mList);
         mAdapter.setViewProvider(this);
     }
 

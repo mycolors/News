@@ -115,6 +115,7 @@ public class FNAdapter<T> extends RecyclerView.Adapter<FNAdapter.MyViewHolder> {
             super(itemView);
         }
 
+        @SuppressWarnings("unchecked")
         public <T extends View> T getView(int resId) {
             T t = (T) mViews.get(resId);
             if (t == null) {
@@ -132,7 +133,7 @@ public class FNAdapter<T> extends RecyclerView.Adapter<FNAdapter.MyViewHolder> {
         }
     }
 
-    public interface ViewProvider {
+    interface ViewProvider {
         View getView(ViewGroup parent, int viewType);
 
         void bindDataToView(MyViewHolder holder, int position);

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import com.fengniao.news.R;
 import com.fengniao.news.bean.ZhiHuArticle;
+import com.fengniao.news.net.FNCallback;
+import com.fengniao.news.net.HttpUtils;
 import com.fengniao.news.ui.activity.DetailsActivity;
 import com.fengniao.news.ui.adapter.ZhiHuArticleListAdapter;
 import com.fengniao.news.util.DateUtils;
@@ -137,7 +140,7 @@ public class ZhiHuArticleFragment extends Fragment {
                 Calendar temp = Calendar.getInstance();
                 temp.clear();
                 temp.set(year, monthOfYear, dayOfMonth);
-                getNews(temp.getTime(), true);
+                getArticle(temp.getTime(), true);
 
             }
         }, now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH));
@@ -159,7 +162,7 @@ public class ZhiHuArticleFragment extends Fragment {
     private void loadData() {
         Calendar calendar = Calendar.getInstance();
         initDate(calendar);
-        getNews(calendar.getTime(), true);
+        getArticle(calendar.getTime(), true);
     }
 
 
@@ -168,31 +171,14 @@ public class ZhiHuArticleFragment extends Fragment {
         yesterday.set(mYear, mMonth, mDay);
         yesterday.set(Calendar.DATE, yesterday.get(Calendar.DATE) - 1);
         initDate(yesterday);
-        getNews(yesterday.getTime(), false);
+        getArticle(yesterday.getTime(), false);
     }
 
-
-    private void getNews(Date date, final boolean clean) {
+    public void getArticle(Date date, final boolean isClean) {
         String time = DateUtils.dateToString("yyyyMMdd", date);
-        OkHttpClient mOkHttpClient = new OkHttpClient();
-        Request.Builder builder = new Request.Builder().url(URL_NEWS_BEFORE_ZHIHU + time);
-        builder.method("GET", null);
-        final Request request = builder.build();
-        Call mCall = mOkHttpClient.newCall(request);
-        mCall.enqueue(new Callback() {
+        HttpUtils.getInstance().getZhiHuArticle(time, new FNCallback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getContext(), UNKNOWN_ERROR, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String data = response.body().string();
+            public void onReceiveData(String function, String data, String msg) {
                 try {
                     JSONObject jsonObject = new JSONObject(data);
                     if (jsonObject.getString("date").equals("20130519")) {
@@ -202,23 +188,22 @@ public class ZhiHuArticleFragment extends Fragment {
                     }
                     JSONArray result = jsonObject.getJSONArray("stories");
                     List<ZhiHuArticle> list = JsonUtils.jsonToList(result.toString(), ZhiHuArticle.class);
-                    if (clean)
+                    if (isClean)
                         mList.clear();
                     mList.addAll(list);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.notifyDataSetChanged();
-                            if (swipeRefresh.isRefreshing())
-                                swipeRefresh.setRefreshing(false);
-                        }
-                    });
+                    mAdapter.notifyDataSetChanged();
+                    if (swipeRefresh.isRefreshing())
+                        swipeRefresh.setRefreshing(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onReceiveError(String function, int errorCode, String msg) {
+                Toast.makeText(getContext(), UNKNOWN_ERROR, Toast.LENGTH_SHORT).show();
+            }
         });
     }
-
 
 }

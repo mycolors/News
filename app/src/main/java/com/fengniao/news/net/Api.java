@@ -15,5 +15,7 @@ public class Api {
     public static final String URL_NEWS_BEFORE_ZHIHU = "http://news.at.zhihu.com/api/4/news/before/";
     //头条新闻
     public static final String URL_NEWS_TOU_TIAO = "http://jiudian.365os.com/index.php?c=NewApi&m=Headlines";
+
+    public static final String URL_CHANGE_NAME = "http://jiudian.365os.com/index.php?c=NewApi&m=ChangeName";
 }
 

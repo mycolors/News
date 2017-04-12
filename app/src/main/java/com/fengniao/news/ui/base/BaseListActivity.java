@@ -90,7 +90,7 @@ public abstract class BaseListActivity<T> extends BaseActivity implements FNAdap
     }
 
     public void initAdapter() {
-        mAdapter = new FNAdapter(this, mList);
+        mAdapter = new FNAdapter<T>(this, mList);
         mAdapter.setViewProvider(this);
     }
 

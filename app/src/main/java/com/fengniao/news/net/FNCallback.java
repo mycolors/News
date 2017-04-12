@@ -1,8 +1,5 @@
 package com.fengniao.news.net;
 
-/**
- * Created by a1 on 2017/3/28.
- */
 
 public interface FNCallback {
 

@@ -15,7 +15,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
 
     public BaseFragment() {
@@ -31,8 +31,6 @@ public class BaseFragment extends Fragment {
         return view;
     }
 
-    public int setLayoutId() {
-        return 0;
-    }
+    public abstract int setLayoutId();
 
 }
