@@ -7,6 +7,8 @@
     android:orientation="vertical"
     tools:context="com.fengniao.news.ui.activity.InnerBrowserActivity">
 
+    <include layout="@layout/base_title_bar" />
+
     <ProgressBar
         android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyleHorizontal"
