@@ -9,8 +9,8 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
-class FNCallbackHolder(private val mFunction: String, private val mFNCallback: FNCallback) : Callback {
-    private val mHandler: Handler = Handler(Looper.getMainLooper())
+open class FNCallbackHolder(private val mFunction: String, private val mFNCallback: FNCallback) : Callback {
+    val mHandler: Handler = Handler(Looper.getMainLooper())
 
     override fun onFailure(call: Call, e: IOException) {
         mHandler.post { mFNCallback.onReceiveError(mFunction, -1, "请求失败") }

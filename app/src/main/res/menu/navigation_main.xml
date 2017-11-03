@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_news"
+        android:checkable="true"
+        android:icon="@mipmap/ic_launcher"
+        android:title="新闻" />
+
+    <item
+        android:id="@+id/item_read"
+        android:checkable="true"
+        android:icon="@mipmap/ic_launcher"
+        android:title="阅读" />
+    <item
+        android:id="@+id/item_test"
+        android:checkable="true"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Test" />
+
+    <item
+        android:id="@+id/item_others"
+        android:checkable="true"
+        android:icon="@mipmap/ic_launcher"
+        android:title="其他" />
+</menu>

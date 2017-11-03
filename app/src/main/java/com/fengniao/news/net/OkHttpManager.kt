@@ -9,12 +9,7 @@ import okhttp3.RequestBody
  */
 
 class OkHttpManager private constructor() {
-    private val mOkHttpClient: OkHttpClient
-
-
-    init {
-        mOkHttpClient = OkHttpClient()
-    }
+    private val mOkHttpClient: OkHttpClient = OkHttpClient()
 
 
     //异步get

@@ -45,9 +45,9 @@ class ZhiHuArticleListAdapter(private val mContext: Context, private val mList: 
                 (holder.getView(R.id.tv_end) as TextView).setText(R.string.loading)
             }
         } else {
-            holder.title.text = mList[position].title
+            (holder.getView(R.id.text_news) as TextView).text = mList[position].title
             if (mList[position].images.isNotEmpty())
-                Glide.with(mContext).load(mList[position].images[0]).into(holder.imgNews)
+                Glide.with(mContext).load(mList[position].images[0]).into(holder.getView(R.id.img_news) as ImageView)
             holder.itemView.setOnClickListener {
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener!!.onItemClick(holder.adapterPosition)
@@ -64,11 +64,10 @@ class ZhiHuArticleListAdapter(private val mContext: Context, private val mList: 
 
     override fun getItemCount(): Int = mList.size + 1
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title: TextView = itemView.findViewById(R.id.text_news) as TextView
-        val imgNews: ImageView = itemView.findViewById(R.id.img_news) as ImageView
+   inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun getView(resId: Int): View = itemView.findViewById(resId)
+
     }
 
     interface OnItemClickListener {

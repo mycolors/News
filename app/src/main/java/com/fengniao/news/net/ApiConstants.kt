@@ -12,5 +12,7 @@ object ApiConstants {
     val URL_NEWS_TOU_TIAO = "http://jiudian.365os.com/index.php?c=NewApi&m=Headlines"
 
     val URL_CHANGE_NAME = "http://jiudian.365os.com/index.php?c=NewApi&m=ChangeName"
+
+    val URL_YUE_ARTICLE = "http://srv.yue.fm/"
 }
 

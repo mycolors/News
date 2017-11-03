@@ -5,43 +5,30 @@ import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v4.widget.NestedScrollView
 import android.support.v4.widget.SwipeRefreshLayout
-import android.util.Log
 import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ImageView
-
+import butterknife.OnClick
 import com.bumptech.glide.Glide
 import com.fengniao.news.R
-import com.fengniao.news.bean.ZhiHuArticleDetail
+import com.fengniao.news.app.Constant.UNKNOWN_ERROR
 import com.fengniao.news.base.BaseActivity
+import com.fengniao.news.bean.ZhiHuArticleDetail
+import com.fengniao.news.net.ApiConstants.URL_NEWS_DETAIL
 import com.fengniao.news.util.JsonUtils
-
+import okhttp3.*
 import java.io.IOException
 
-import butterknife.BindView
-import butterknife.OnClick
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-
-import com.fengniao.news.app.Constant.UNKNOWN_ERROR
-import com.fengniao.news.net.ApiConstants.URL_NEWS_DETAIL
-
 class DetailsActivity : BaseActivity() {
-    @BindView(R.id.web_view)
-    internal var webView: WebView? = null
-    @BindView(R.id.swipe_refresh)
-    internal var swipeRefresh: SwipeRefreshLayout? = null
-    @BindView(R.id.scroll_view)
-    internal var scrollView: NestedScrollView? = null
-    @BindView(R.id.toolbar_layout)
-    internal var toolbarLayout: CollapsingToolbarLayout? = null
-    @BindView(R.id.img)
-    internal var img: ImageView? = null
+    override fun getLayoutId(): Int  = R.layout.activity_details
+
+    lateinit var webView: WebView
+    lateinit var swipeRefresh: SwipeRefreshLayout
+    lateinit var scrollView: NestedScrollView
+    lateinit var toolbarLayout: CollapsingToolbarLayout
+    lateinit var img: ImageView
     //    @BindView(R.id.toolbar)
     //    Toolbar toolbar;
     private var ariticleId: Int = 0
@@ -50,13 +37,23 @@ class DetailsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
+        findView()
         initWebView()
         initView()
     }
 
+    private fun findView() {
+        webView = findViewById(R.id.web_view) as WebView
+        swipeRefresh = findViewById(R.id.swipe_refresh) as SwipeRefreshLayout
+        scrollView = findViewById(R.id.scroll_view) as NestedScrollView
+        toolbarLayout = findViewById(R.id.toolbar_layout) as CollapsingToolbarLayout
+        img = findViewById(R.id.img) as ImageView
+    }
+
+
     private fun initView() {
-        swipeRefresh!!.isRefreshing = true
-        swipeRefresh!!.setOnRefreshListener { getDetail() }
+        swipeRefresh.isRefreshing = true
+        swipeRefresh.setOnRefreshListener { getDetail() }
         ariticleId = intent.getIntExtra("id", -1)
         if (ariticleId < 0) return
         getDetail()
@@ -64,7 +61,7 @@ class DetailsActivity : BaseActivity() {
 
     @OnClick(R.id.toolbar)
     fun toolBar(view: View) {
-        scrollView!!.smoothScrollTo(0, 0)
+        scrollView.smoothScrollTo(0, 0)
     }
 
 
@@ -87,11 +84,11 @@ class DetailsActivity : BaseActivity() {
                     //加载本地html源码
                     val encoding = "UTF-8"
                     val mimeType = "text/html"
-                    webView!!.loadDataWithBaseURL("x-data://base", html, mimeType, encoding, null)
-                    Glide.with(this@DetailsActivity).load(detail!!.image).into(img!!)
+                    webView.loadDataWithBaseURL("x-data://base", html, mimeType, encoding, null)
+                    Glide.with(this@DetailsActivity).load(detail!!.image).into(img)
                     setCollapsingToolbarLayoutTitle(detail!!.title)
-                    if (swipeRefresh!!.isRefreshing)
-                        swipeRefresh!!.isRefreshing = false
+                    if (swipeRefresh.isRefreshing)
+                        swipeRefresh.isRefreshing = false
                 }
 
             }
@@ -100,11 +97,11 @@ class DetailsActivity : BaseActivity() {
 
     // to change the title's font size of toolbar layout
     private fun setCollapsingToolbarLayoutTitle(title: String?) {
-        toolbarLayout!!.title = title
-        toolbarLayout!!.setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
-        toolbarLayout!!.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)
-        toolbarLayout!!.setExpandedTitleTextAppearance(R.style.ExpandedAppBarPlus1)
-        toolbarLayout!!.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarPlus1)
+        toolbarLayout.title = title
+        toolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar)
+        toolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar)
+        toolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBarPlus1)
+        toolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBarPlus1)
     }
 
 
@@ -146,19 +143,19 @@ class DetailsActivity : BaseActivity() {
 
     private fun initWebView() {
         //能够和js交互
-        webView!!.settings.javaScriptEnabled = true
+        webView.settings.javaScriptEnabled = true
         //缩放,设置为不能缩放可以防止页面上出现放大和缩小的图标
-        webView!!.settings.builtInZoomControls = false
+        webView.settings.builtInZoomControls = false
         //缓存
-        webView!!.settings.cacheMode = WebSettings.LOAD_NO_CACHE
+        webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
         //开启DOM storage API功能
-        webView!!.settings.domStorageEnabled = true
+        webView.settings.domStorageEnabled = true
         //开启application Cache功能
-        webView!!.settings.setAppCacheEnabled(false)
+        webView.settings.setAppCacheEnabled(false)
 
-        webView!!.settings.setAppCacheEnabled(true)
+        webView.settings.setAppCacheEnabled(true)
 
-        webView!!.setWebViewClient(object : WebViewClient() {
+        webView.setWebViewClient(object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 val intent = Intent(this@DetailsActivity, InnerBrowserActivity::class.java)
                 intent.putExtra("url", url)
@@ -170,7 +167,7 @@ class DetailsActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        webView!!.destroy()
+        webView.destroy()
     }
 
 

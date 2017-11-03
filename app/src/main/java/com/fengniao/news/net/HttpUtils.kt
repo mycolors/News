@@ -2,7 +2,6 @@ package com.fengniao.news.net
 
 import android.text.TextUtils
 import com.fengniao.news.net.ApiConstants.URL_NEWS_BEFORE_ZHIHU
-import com.fengniao.news.net.ApiConstants.URL_NEWS_TOU_TIAO
 import okhttp3.FormBody
 
 class HttpUtils private constructor() {
@@ -22,14 +21,15 @@ class HttpUtils private constructor() {
     }
 
 
-    //获取头条新闻
-    fun getTouTiaoNews(callback: FNCallback) {
-        OkHttpManager.instance.getAsyn(URL_NEWS_TOU_TIAO, FNCallbackHolder(URL_NEWS_TOU_TIAO, callback))
-    }
+
 
     //获取知乎文章
     fun getZhiHuArticle(date: String, callback: FNCallback) {
         OkHttpManager.instance.getAsyn(URL_NEWS_BEFORE_ZHIHU + date, FNCallbackHolder(URL_NEWS_BEFORE_ZHIHU, callback))
+    }
+
+    fun getWebCode(url:String,callback: FNCallback){
+        OkHttpManager.instance.getAsyn(url, AllDataCallBackHolder(url,callback))
     }
 
     companion object {

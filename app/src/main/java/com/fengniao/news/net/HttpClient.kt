@@ -1,7 +1,9 @@
 package com.fengniao.news.net
 
 import com.fengniao.news.app.AppContext
-import com.fengniao.news.net.api.ZhiHuService
+import com.fengniao.news.net.api.NewsService
+import com.fengniao.news.net.api.ReadService
+import com.fengniao.news.net.api.WebService
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,8 +34,13 @@ class HttpClient private constructor() {
     }
 
 
-    fun getZhiHuService(): ZhiHuService =
-            createApi(ZhiHuService::class.java, ApiConstants.URL_NEWS_BEFORE_ZHIHU)
+    fun getZhiHuService(): NewsService =
+            createApi(NewsService::class.java, ApiConstants.URL_NEWS_BEFORE_ZHIHU)
+
+    fun getYueArticle(): ReadService = createApi(ReadService::class.java, ApiConstants.URL_YUE_ARTICLE)
+
+
+    fun getWebCode(url: String): WebService = createApi(WebService::class.java, url)
 
 
     private fun <T> createApi(clazz: Class<T>, baseUrl: String): T {

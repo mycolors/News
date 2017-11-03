@@ -24,7 +24,7 @@ class ZhiHuFragment : Fragment() {
 
     internal var newsList: RecyclerView? = null
     internal var fabCalendar: FloatingActionButton? = null
-    internal var swipeRefresh: SwipeRefreshLayout? = null
+    private var swipeRefresh: SwipeRefreshLayout? = null
     private var mAdapter: ZhiHuArticleListAdapter? = null
     private var mList: MutableList<ZhiHuResult.Story>? = null
     private var mYear: Int = 0

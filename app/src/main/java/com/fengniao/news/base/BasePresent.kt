@@ -3,5 +3,6 @@ package com.fengniao.news.base
 
 interface BasePresent {
 
-    fun start();
+    fun start()
+
 }
