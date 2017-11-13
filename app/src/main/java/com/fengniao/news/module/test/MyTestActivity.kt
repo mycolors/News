@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.fengniao.news.R
 import com.fengniao.news.base.BaseListActivity
 import com.fengniao.news.base.FNAdapter
+import com.fengniao.news.module.test.otherapp.OtherAppFeaturesActivity
 import kotlinx.android.synthetic.main.item_list_test.view.*
 
 class MyTestActivity : BaseListActivity<String>() {
@@ -32,10 +33,9 @@ class MyTestActivity : BaseListActivity<String>() {
     override fun onItemClick(holder: FNAdapter.MyViewHolder?, position: Int) {
 
         when (position) {
-            0 ->
-                jumpToActivity(PropertyAnimationActivity::class.java)
-            1 ->
-                jumpToActivity(CustomizeViewActivity::class.java)
+            0 -> jumpToActivity(PropertyAnimationActivity::class.java)
+            1 -> jumpToActivity(CustomizeViewActivity::class.java)
+            2 -> jumpToActivity(OtherAppFeaturesActivity::class.java)
         }
     }
 

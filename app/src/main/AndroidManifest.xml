@@ -27,11 +27,17 @@
         <activity
             android:name=".ui.activity.InnerBrowserActivity"
             android:process=":innerBrower" />
-        <activity android:name=".ui.activity.TestActivity"></activity>
+        <activity android:name=".ui.activity.TestActivity" />
         <activity android:name=".module.read.YueFMActivity" />
         <activity android:name=".module.test.MyTestActivity" />
         <activity android:name=".module.test.PropertyAnimationActivity" />
-        <activity android:name=".module.test.CustomizeViewActivity"></activity>
+        <activity android:name=".module.test.CustomizeViewActivity" />
+        <activity
+            android:name=".module.test.otherapp.OtherAppFeaturesActivity"
+            android:label="@string/title_activity_other_app_features"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".module.test.otherapp.neteasymusic.NetEasySongListActivity" />
+        <activity android:name=".module.test.otherapp.neteasymusic.NetEasyMusicActivity"></activity>
     </application>
 
 </manifest>
